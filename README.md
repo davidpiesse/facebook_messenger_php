@@ -24,6 +24,7 @@ A demo project (Laravel based) will be released soon.
 In the meantime you can interact with a demo ChatBot created with this wrapper.
 
 Search for **@laravelmessengerbot** in Facebook messenger and you can test a load of the function.
+Or go here https://www.facebook.com/laravelmessengerbot/
 
 ## Todo
 Things still to implement
