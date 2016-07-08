@@ -16,8 +16,9 @@ $messenger = new Messenger($token);
 ```
 and then to send a text message
 ```php
-$messenger->sendMessage(new TextMessage('Foo Bar'),'recipient_id);
+$messenger->sendMessage(new TextMessage('Foo Bar'),'recipient_id');
 ```
+More info to come...
 
 ## Demo
 A demo project (Laravel based) will be released soon.
