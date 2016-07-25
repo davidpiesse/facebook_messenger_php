@@ -1,52 +1,72 @@
 <?php
 namespace mapdev\FacebookMessenger;
 
-//provides common fields, constructor and functions required
 class Callback
 {
 
-    //request?
     public $object;
-    protected $entry;
-    public $id;
-    public $time;
-    public $messaging = [];
-    public $messages = [];
+    public $entries = [];
+    private $_entries = [];
 
-
+    /**
+     * Cb constructor.
+     * @param $data
+     * An array of request information $request->all()
+     */
     public function __construct($data)
     {
-        $this->object = $data['object'];
-        $this->entry = $data['entry'][0];
-        $this->id = $data['entry'][0]['id'];
-        $this->time = $data['entry'][0]['time'];
-        $this->messaging = $data['entry'][0]['messaging'];
-        //get all messages as objects
-        $this->messages = collect($this->messaging)->map(function($message){
-            if(isset($message['message']))
-                return new MessageReceived($message);
-            if(isset($message['postback']))
-                return new PostbackReceived($message);
-            if(isset($message['delivery']))
-                return new MessageDelivered($message);
-            if(isset($message['read']))
-                return new MessageRead($message);
-            if(isset($message['optin']))
-                return new AuthenticationOptin($message);
-            if(isset($message['account_linking']))
-                return new AccountLinking($message);
-            //catch all?
+        $this->object = Helper::array_find($data, 'object');
+        $this->_entries = Helper::array_find($data, 'entry');
+        $this->buildEntries();
+    }
+
+    private function buildEntries()
+    {
+        $this->entries = collect($this->_entries)->map(function ($entry) {
+            return new Entry($entry);
         });
     }
 
-    public function isValid()
+//TODO refactor into collections each/map/filter
+    public function textMessages()
     {
-        return true;
+        $result = [];
+        foreach ($this->entries as $entry) {
+            foreach ($entry->messages as $entryMessage) {
+                if ($entryMessage->isMessage) {
+                    if ($entryMessage->message->isText)
+                        $result[] = $entryMessage;
+                }
+            }
+        }
+        return collect($result);
     }
 
-    //object
-    //entry
-    //id
-    //time
-    //messaging
+//TODO refactor into collections each/map/filter
+    public function postbackMessages()
+    {
+        $result = [];
+        foreach ($this->entries as $entry) {
+            foreach ($entry->messages as $entryMessage) {
+                if ($entryMessage->isPostback)
+                    $result[] = $entryMessage;
+            }
+        }
+        return collect($result);
+    }
+
+//TODO refactor into collections each/map/filter
+    public function attachmentMessages()
+    {
+        $result = [];
+        foreach ($this->entries as $entry) {
+            foreach ($entry->messages as $entryMessage) {
+                if ($entryMessage->isMessage) {
+                    if ($entryMessage->message->hasAttachments)
+                        $result[] = $entryMessage->message;
+                }
+            }
+        }
+        return collect($result);
+    }
 }

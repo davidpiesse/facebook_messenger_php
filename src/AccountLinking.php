@@ -1,18 +1,22 @@
 <?php
 namespace mapdev\FacebookMessenger;
 
-class AccountLinking extends CallbackMessage
+class AccountLinking
 {
-    public $timestamp;
     public $status;
     public $authorization_code;
+    public $linked = false;
+    public $unlinked = false;
 
-    public function __construct($message)
+    /**
+     * Delivered constructor.
+     * @param $account_linking
+     */
+    public function __construct($account_linking)
     {
-        parent::__construct($message);
-        $this->timestamp = $message['timestamp'];
-        $this->status = $message['account_linking']['status'];
-        $this->authorization_code = isset($message['account_linking']['authorization_code']) ? $message['account_linking']['authorization_code'] : null;
+        $this->status = Helper::array_find($account_linking, 'status');
+        $this->authorization_code = Helper::array_find($account_linking, 'authorization_code');
+        $this->linked = ($this->status == 'linked');
+        $this->unlinked = ($this->status == 'unlinked');
     }
-
 }
