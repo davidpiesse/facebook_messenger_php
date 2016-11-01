@@ -2,11 +2,7 @@
 
 namespace mapdev\FacebookMessenger\Callback;
 
-//use mapdev\FacebookMessenger\Callback\AccountLinking;
-//use mapdev\FacebookMessenger\Callback\Authentication;
 use mapdev\FacebookMessenger\Helper;
-//use mapdev\FacebookMessenger\Callback\Message;
-//use mapdev\FacebookMessenger\Callback\Postback;
 
 class EntryMessage
 {

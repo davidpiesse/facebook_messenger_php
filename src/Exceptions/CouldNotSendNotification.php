@@ -11,12 +11,6 @@ class CouldNotSendNotification extends \Exception
     {
         $result = json_decode($exception->getResponse()->getBody());
         return new static("Facebook responded with an error `{$result->error->code} - {$result->error->type} {$result->error->message}`");
-//        return new static("Facebook responded with an error",
-//            [
-//                'code' => $result->error->code,
-//                'type' => $result->error->type,
-//                'message' => $result->error->message
-//            ]);
     }
 
     public static function invalidFacebookToken()

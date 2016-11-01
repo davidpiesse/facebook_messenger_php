@@ -2,7 +2,6 @@
 
 namespace mapdev\FacebookMessenger\Components;
 
-
 use mapdev\FacebookMessenger\MessengerUtils;
 use mapdev\FacebookMessenger\Traits\HasButtons;
 use mapdev\FacebookMessenger\Traits\HasTitle;

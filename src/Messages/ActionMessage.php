@@ -5,7 +5,6 @@ namespace mapdev\FacebookMessenger\Messages;
 use mapdev\FacebookMessenger\Exceptions\CouldNotCreateMessage;
 use mapdev\FacebookMessenger\Interfaces\MessageInterface;
 use mapdev\FacebookMessenger\Traits\MessageTrait;
-use mapdev\FacebookMessenger\Enums\ActionType;
 use JsonSerializable;
 
 class ActionMessage implements MessageInterface, JsonSerializable

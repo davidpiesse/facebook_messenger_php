@@ -2,8 +2,6 @@
 
 namespace mapdev\FacebookMessenger\Components;
 
-use mapdev\FacebookMessenger\MessengerUtils;
-
 class ReceiptAddress implements \JsonSerializable
 {
     public $street_1;

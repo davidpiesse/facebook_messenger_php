@@ -2,7 +2,6 @@
 
 namespace mapdev\FacebookMessenger\Exceptions;
 
-
 class CouldNotReadWebhook extends \Exception
 {
     public static function noData()

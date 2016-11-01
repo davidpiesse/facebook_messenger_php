@@ -21,11 +21,11 @@ Or go here https://www.facebook.com/laravelmessengerbot/
 ## Todo
 Things still to implement
   - User Profile
-  - Receipt Template
   - All Airline Templates
   - Sending of a file stream
+  - Payments
 
-Current dependencies are GuzzleHttp/Guzzle, rappasoft/laravel-helpers and TightenCo/collect. These allow the pacckage to make easy requests to the FB Messenger API and also deal with arrays in a super amazing way.
+Current dependencies are GuzzleHttp/Guzzle, rappasoft/laravel-helpers and illuminate/http. These allow the package to make easy requests to the FB Messenger API and also deal with arrays in a super amazing way.
 
 ## License
 MIT
@@ -48,9 +48,9 @@ $messenger->sendMessage(new TextMessage('Foo Bar'),'recipient_id');
 Still writing this...
 
 # Incoming Webhook
-For Facbook Messenger you provide a webhook URL for their API to contact your server when certain events occur. [-Link-](https://developers.facebook.com/docs/messenger-platform/webhook-reference)
+For Facebook Messenger you provide a webhook URL for their API to contact your server when certain events occur. [-Link-](https://developers.facebook.com/docs/messenger-platform/webhook-reference)
 
-Most of these revolve around imcoming messages from a user; be it a text message, attachment, postback etc. these are all handled by the **Callback** object.
+Most of these revolve around incoming messages from a user; be it a text message, attachment, postback etc. these are all handled by the **Callback** object.
 
 Pass in an array of data from the post request {in Laravel use ``` $request->all()```}
 ```php

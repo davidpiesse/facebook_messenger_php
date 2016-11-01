@@ -2,8 +2,6 @@
 
 namespace mapdev\FacebookMessenger\Components;
 
-use mapdev\FacebookMessenger\MessengerUtils;
-
 class ReceiptElement implements \JsonSerializable
 {
     public $title;

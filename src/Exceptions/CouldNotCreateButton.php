@@ -2,7 +2,6 @@
 
 namespace mapdev\FacebookMessenger\Exceptions;
 
-
 class CouldNotCreateButton extends \Exception
 {
     public static function noType()
