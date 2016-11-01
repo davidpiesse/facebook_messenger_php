@@ -2,8 +2,6 @@
 
 namespace mapdev\FacebookMessenger;
 
-use Carbon\Carbon;
-
 class Helper
 {
     /**
@@ -31,7 +29,7 @@ class Helper
         $str_arr = preg_split('/[.,:]+/', $mid);;
         $result = [];
         $result['timestamp'] = $str_arr[1];
-        $result['datetime'] = Carbon::createFromTimestamp($result['timestamp'] / 1000);
+        $result['datetime'] = \Carbon\Carbon::createFromTimestamp($result['timestamp'] / 1000);
         $result['id'] = $str_arr[2];
         return $result;
     }

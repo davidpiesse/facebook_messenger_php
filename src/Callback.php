@@ -1,6 +1,9 @@
 <?php
 namespace mapdev\FacebookMessenger;
 
+use mapdev\FacebookMessenger\Callback\Entry;
+use mapdev\FacebookMessenger\Callback\EntryMessage;
+
 class Callback
 {
 
@@ -20,6 +23,11 @@ class Callback
         $this->buildEntries();
     }
 
+    public static function create($data)
+    {
+        return new static($data);
+    }
+
     private function buildEntries()
     {
         $this->entries = collect($this->_entries)->map(function ($entry) {
@@ -27,15 +35,33 @@ class Callback
         });
     }
 
-//TODO refactor into collections each/map/filter
+    //TODO refactor into collections each/map/filter
+    //map then filter (double isMessage & isText)
+    //Not Quick Replies
     public function textMessages()
     {
         $result = [];
         foreach ($this->entries as $entry) {
             foreach ($entry->messages as $entryMessage) {
                 if ($entryMessage->isMessage) {
-                    if ($entryMessage->message->isText)
+                    if ($entryMessage->message->isText && !$entryMessage->message->isQuickReply) {
                         $result[] = $entryMessage;
+                    }
+                }
+            }
+        }
+        return collect($result);
+    }
+
+    public function quickreplies()
+    {
+        $result = [];
+        foreach ($this->entries as $entry) {
+            foreach ($entry->messages as $entryMessage) {
+                if ($entryMessage->isMessage) {
+                    if ($entryMessage->message->isQuickReply) {
+                        $result[] = $entryMessage;
+                    }
                 }
             }
         }
@@ -48,8 +74,9 @@ class Callback
         $result = [];
         foreach ($this->entries as $entry) {
             foreach ($entry->messages as $entryMessage) {
-                if ($entryMessage->isPostback)
+                if ($entryMessage->isPostback) {
                     $result[] = $entryMessage;
+                }
             }
         }
         return collect($result);
@@ -62,8 +89,9 @@ class Callback
         foreach ($this->entries as $entry) {
             foreach ($entry->messages as $entryMessage) {
                 if ($entryMessage->isMessage) {
-                    if ($entryMessage->message->hasAttachments)
+                    if ($entryMessage->message->hasAttachments) {
                         $result[] = $entryMessage->message;
+                    }
                 }
             }
         }

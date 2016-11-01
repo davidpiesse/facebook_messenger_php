@@ -1,13 +1,13 @@
 {
     "name": "davidpiesse/facebook_messenger_php",
     "description": "A PHP wrapper for the Facebook Messenger Platform",
-    "version": "0.0.1",
+    "version": "0.2.7",
     "type": "library",
     "require": {
         "guzzlehttp/guzzle": "^6.2",
-        "tightenco/collect": "^5.2",
         "rappasoft/laravel-helpers": "dev-master",
-        "nesbot/carbon": "^1.21"
+        "nesbot/carbon": "^1.21",
+        "illuminate/http": "^5.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.4"
