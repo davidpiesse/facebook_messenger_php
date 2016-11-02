@@ -2,7 +2,6 @@
 namespace mapdev\FacebookMessenger;
 
 use mapdev\FacebookMessenger\Callback\Entry;
-use mapdev\FacebookMessenger\Callback\EntryMessage;
 
 class Callback
 {

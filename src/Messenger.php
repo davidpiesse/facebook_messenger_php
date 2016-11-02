@@ -1,11 +1,8 @@
 <?php
 namespace mapdev\FacebookMessenger;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use mapdev\FacebookMessenger\Enums\FileType;
 use mapdev\FacebookMessenger\Enums\ThreadSettingState;
-use mapdev\FacebookMessenger\Enums\ThreadSettingType;
+use GuzzleHttp\Psr7;
 
 /**
  * Class Messenger
@@ -27,15 +24,16 @@ class Messenger
         $this->api = new MessengerApi($token);
     }
 
-    public function hubReply(Request $request, $verify_token)
+    public function hubReply(array $data, $verify_token)
     {
-        if ($request->has('hub_mode') &&
-            $request->hub_mode == 'subscribe' &&
-            $request->hub_verify_token == $verify_token
+        //change to request data array
+        if (array_key_exists('hub_mode', $data) &&
+            $data['hub_mode'] == 'subscribe' &&
+            $data['hub_verify_token'] == $verify_token
         ) {
-            return Response::make($request->hub_challenge, 200);
+            return new Psr7\Response(200,null,$data['hub_challenge']);
         }
-        return Response::make('No Valid Challenge', 400);
+        return new Psr7\Response(400,null,'No Valid Challenge');
     }
 
     //all message objects have toArray on them...
@@ -54,41 +52,6 @@ class Messenger
     {
         return UserProfile::create($this->api->callApi($user_id, null, MessengerApi::GET));
     }
-
-    //Todo Fix Auth
-//    public function linkAccount($account_linking_token)
-//    {
-//        //return PAGE_ID & PSID
-//        return $this->api->callApi(
-//            'me?fields=recipient&account_linking_token=' . $account_linking_token,
-//            [],
-//            MessengerApi::GET);
-//    }
-//
-//    public function getLinkAccountPSID($account_linking_token)
-//    {
-//        //return PAGE_ID & PSID
-//        return $this->api->callApi(
-//            'me?fields=recipient&account_linking_token=' . $account_linking_token,
-//            [],
-//            MessengerApi::GET);
-//    }
-//
-//    public function unlinkAccount($psid)
-//    {
-//        return $this->api->callApi('me/unlink_accounts', [
-//            'psid' => $psid,
-//        ]);
-//    }
-
-//TODO Fix api call - Tried accessing nonexisting field
-//    public function validateWebhook($app_id, $page_id)
-//    {
-//        Log::debug(
-//            $this->api->callApi($app_id . '/subscriptions_sample?object_id=' . $page_id . '&object=page&custom_fields={"page_id":' . $page_id.'}',
-//                [], MessengerApi::GET)
-//        );
-//    }
 
     public function setGreetingText($text)
     {
@@ -164,63 +127,44 @@ class Messenger
         ]);
     }
 
-    public function sendMessage(\mapdev\FacebookMessenger\MessageInterface $message, $recipient_id)
-    {
-        return $this->api->callApi('me/messages',
-            $this->addRecipient($message->toData(), $recipient_id)
-        );
-    }
-
-    public function sendAction($action, $recipient_id)
-    {
-        return $this->api->callApi('me/messages',
-            ['sender_action' => $action, 'recipient' => ['id' => $recipient_id]]);
-    }
-
-    public function sendFile($file, $recipient_id, $type = FileType::File)
-    {
-        $data = [
-            'message' => ['attachment' => ['type' => $type]],
-            'recipient' => ['id' => $recipient_id]
-        ];;
-        if (is_string($file)) {
-            $data['payload'] = ['url' => $file];
-        } else {
-            $data['filedata'] = $file;
-        }
-        return $this->api->callApi('me/messages', $data);
-    }
-
-    public function sendImage($file, $recipient_id)
-    {
-        $this->sendFile($file, $recipient_id, FileType::Image);
-    }
-
-    public function sendVideo($file, $recipient_id)
-    {
-        $this->sendFile($file, $recipient_id, FileType::Video);
-    }
-
-    public function sendAudio($file, $recipient_id)
-    {
-        $this->sendFile($file, $recipient_id, FileType::Audio);
-    }
-
-    public function sendTemplate(TemplateInterface $template, $recipient_id)
-    {
-        return $this->api->callApi('me/messages',
-            $this->addRecipient($template->toData(), $recipient_id)
-        );
-    }
-
-    public function quickReply(QuickReply $quick_reply, $recipient_id)
-    {
-        return $this->api->callApi('me/messages', $quick_reply->toData() + ['recipient' => ['id' => $recipient_id]]);
-    }
-
     protected function addRecipient($data, $recipient_id)
     {
         $data['recipient'] = ['id' => $recipient_id];
         return $data;
     }
+
+    //Todo Fix Auth
+//    public function linkAccount($account_linking_token)
+//    {
+//        //return PAGE_ID & PSID
+//        return $this->api->callApi(
+//            'me?fields=recipient&account_linking_token=' . $account_linking_token,
+//            [],
+//            MessengerApi::GET);
+//    }
+//
+//    public function getLinkAccountPSID($account_linking_token)
+//    {
+//        //return PAGE_ID & PSID
+//        return $this->api->callApi(
+//            'me?fields=recipient&account_linking_token=' . $account_linking_token,
+//            [],
+//            MessengerApi::GET);
+//    }
+//
+//    public function unlinkAccount($psid)
+//    {
+//        return $this->api->callApi('me/unlink_accounts', [
+//            'psid' => $psid,
+//        ]);
+//    }
+
+//TODO Fix api call - Tried accessing nonexisting field
+//    public function validateWebhook($app_id, $page_id)
+//    {
+//        Log::debug(
+//            $this->api->callApi($app_id . '/subscriptions_sample?object_id=' . $page_id . '&object=page&custom_fields={"page_id":' . $page_id.'}',
+//                [], MessengerApi::GET)
+//        );
+//    }
 }

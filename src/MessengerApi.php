@@ -57,5 +57,4 @@ class MessengerApi
             throw CouldNotSendNotification::couldNotCommunicateWithFacebook($ex);
         }
     }
-
 }
