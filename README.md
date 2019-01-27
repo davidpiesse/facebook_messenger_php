@@ -1,3 +1,5 @@
+# Currently abandoned - Please use Marcel's Botman.io (its much better)
+
 # Facebook Messenger PHP Wrapper
 
 This package is a wrapper around the majority of the functionality of the Facebook Messenger platform. A list of features not yet implemented is below.
